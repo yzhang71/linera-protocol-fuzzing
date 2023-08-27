@@ -1,0 +1,1 @@
+(module (func $arithmetic (param $var_e f32) (param $var_f f32) (result f32) get_local $var_e get_local $var_f f32.sub) (func $operations (param $arg i32) (result i32) (i32.add (i32.add (i32.ctz (local.get $arg)) (i32.clz (local.get $arg)))(i32.popcnt (local.get $arg)))) (func $func_a) (table $table_1 0 funcref) (func $table_operations (drop (table.size $table_1))))

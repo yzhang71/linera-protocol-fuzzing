@@ -1,0 +1,1 @@
+(module (memory 1) (export "memory" (memory 0)) (func $store_num (i32.store (i32.const 0) (i32.const 42))) (start $store_num) (func $func_h) (table $table_1 0 funcref) (func $table_operations (drop (table.size $table_1))))

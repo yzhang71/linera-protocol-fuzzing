@@ -1,0 +1,1 @@
+(module (func $arithmetic (param $var_c i64) (param $var_d i64) (result i64) get_local $var_c get_local $var_d i64.add))

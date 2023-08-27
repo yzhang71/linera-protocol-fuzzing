@@ -1,0 +1,1 @@
+(module (func $arithmetic (param $var_g f64) (param $var_h f64) (result f64) get_local $var_g get_local $var_h f64.add) (type $func_i64_i64 (func (param i64) (result i64))) (func $double_i64 (type $func_i64_i64) (param $x i64) (result i64) (i64.mul (local.get $x) (i64.const 0))))

@@ -1,0 +1,1 @@
+(module (memory 1) (export "memory" (memory 0)) (func $store_num (i32.store (i32.const 0) (i32.const 42))) (start $store_num) (func $arithmetic (param $var_g f64) (param $var_h f64) (result f64) get_local $var_g get_local $var_h f64.mul))

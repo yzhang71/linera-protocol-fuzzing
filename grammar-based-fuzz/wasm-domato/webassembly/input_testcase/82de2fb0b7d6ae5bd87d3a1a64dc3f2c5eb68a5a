@@ -1,0 +1,1 @@
+(module (func $arithmetic (param $var_a i32) (param $var_b i32) (result i32) get_local $var_a get_local $var_b i32.mul) (func $arithmetic (param $var_e f32) (param $var_f f32) (result f32) get_local $var_e get_local $var_f f32.mul))

@@ -1,0 +1,1 @@
+(module (func $set_global (param $value f64) get_local $value set_global $globalname_d) (func $get_global (result f64) get_global $globalname_h) (func $arithmetic (param $var_a i32) (param $var_b i32) (result i32) get_local $var_a get_local $var_b i32.sub) (memory 1) (export "memory" (memory 0)) (func $store_num (i32.store (i32.const 0) (i32.const 42))) (start $store_num))

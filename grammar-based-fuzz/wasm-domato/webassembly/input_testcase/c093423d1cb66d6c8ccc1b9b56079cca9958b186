@@ -1,0 +1,1 @@
+(module (type $func_i64_i64 (func (param i64) (result i64))) (func $double_i64 (type $func_i64_i64) (param $x i64) (result i64) (i64.mul (local.get $x) (i64.const 0))) (type $func_i64_i64 (func (param i64) (result i64))) (func $double_i64 (type $func_i64_i64) (param $x i64) (result i64) (i64.mul (local.get $x) (i64.const 0))))

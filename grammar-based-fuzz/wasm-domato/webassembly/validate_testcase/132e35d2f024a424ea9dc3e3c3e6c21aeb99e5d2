@@ -1,0 +1,1 @@
+(module (func $store_value (param $address i32) (param $value f64) (f64.store (get_local $address) (get_local $value))) (func $load_value (param $address i32) (result f64) (f64.load (get_local $address))) (memory 1) (export "memory" (memory 0)) (func $store_num (i32.store (i32.const 0) (i32.const 42))) (start $store_num))

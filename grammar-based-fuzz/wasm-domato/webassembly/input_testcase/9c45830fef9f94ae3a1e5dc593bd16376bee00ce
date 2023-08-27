@@ -1,0 +1,1 @@
+(module (func $set_global (param $value f32) get_local $value set_global $globalname_g) (func $get_global (result f32) get_global $globalname_c) (func $arithmetic (param $var_a i32) (param $var_b i32) (result i32) get_local $var_a get_local $var_b i32.sub))

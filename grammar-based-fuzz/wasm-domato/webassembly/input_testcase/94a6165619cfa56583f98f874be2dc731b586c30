@@ -1,0 +1,1 @@
+(module (func $arithmetic (param $var_a i32) (param $var_b i32) (result i32) get_local $var_a get_local $var_b i32.sub) (func $is_even (param $var_a i32) (result i32) (local $rem_i32 i32) (set_local $rem_i32 (i32.rem_u (get_local $var_a) (i32.const 2))) (i32.eqz (get_local $rem_i32))) (export "is_even" (func $is_even)))

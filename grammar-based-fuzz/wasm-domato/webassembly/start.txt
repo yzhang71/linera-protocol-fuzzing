@@ -1,0 +1,6 @@
+<funcs> = <func>
+<func> = (func (result i32) (i32.const 42))
+<module> = (module <funcs>)
+!begin lines
+<module>;
+!end lines

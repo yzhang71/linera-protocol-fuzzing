@@ -1,0 +1,1 @@
+(module (elem (i32.const 0) $arithmetic) (elem (i32.const 0) $arithmetic) (func $func_g) (table $table_1 0 funcref) (func $table_operations (drop (table.size $table_1))))

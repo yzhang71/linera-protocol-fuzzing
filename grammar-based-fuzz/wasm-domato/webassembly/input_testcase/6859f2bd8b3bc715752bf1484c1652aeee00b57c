@@ -1,0 +1,1 @@
+(module (data (i32.const 0) "Hello, WebAは🌀🏃‍♀️✨📦📂📝⬇️🏃‍♀️🍂🍃🍀🌿☘️🌾🌺🌻🌼🌷🌹🌸🌾🌾🌿🌵🌴🌲еสวัสดีครับสวัสดีครับनमस्ते🌍CiaoGutenTagこんにちは안녕하세요नमस्ते🌍CiaoGut🌿🌵םЗдравssembly!") (memory 1) (export "memory" (memory 0)) (func $store_num (i32.store (i32.const 0) (i32.const 42))) (start $store_num))

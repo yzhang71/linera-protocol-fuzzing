@@ -1,0 +1,1 @@
+(module (func $arithmetic (param $var_g f64) (param $var_h f64) (result f64) get_local $var_g get_local $var_h f64.mul) (func $local_tee (param i32) (result i32) (local i32) (local.set 0 (local.get 0)) (local.tee 0 (i32.add (local.get 0) (i32.const 1)))) (export "local_tee" (func $local_tee)))

@@ -1,0 +1,1 @@
+(module (func $operations (param $arg i32) (result i32) (i32.add (i32.add (i32.ctz (local.get $arg)) (i32.clz (local.get $arg)))(i32.popcnt (local.get $arg)))) (elem (i32.const 0) $arithmetic) (func $operations (param $arg i32) (result i32) (i32.add (i32.add (i32.ctz (local.get $arg)) (i32.clz (local.get $arg)))(i32.popcnt (local.get $arg)))))

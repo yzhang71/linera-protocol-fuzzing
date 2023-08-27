@@ -1,0 +1,1 @@
+(module (func $store_value (param $address i32) (param $value f32) (f32.store (get_local $address) (get_local $value))) (func $load_value (param $address i32) (result f32) (f32.load (get_local $address))) (func $arithmetic (param $var_g f64) (param $var_h f64) (result f64) get_local $var_g get_local $var_h f64.div))
