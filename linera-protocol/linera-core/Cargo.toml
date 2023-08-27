@@ -1,0 +1,71 @@
+[package]
+name = "linera-core"
+version = "0.3.0"
+description = "The core Linera protocol, including client and server logic, node synchronization, etc."
+authors = ["Linera <contact@linera.io>"]
+readme = "README.md"
+repository = "https://github.com/linera-io/linera-protocol"
+homepage = "https://linera.dev"
+documentation = "https://docs.rs/linera-core/latest/linera_core/"
+license = "Apache-2.0"
+edition = "2021"
+
+[features]
+default = ["wasmer", "rocksdb"]
+wasmer = ["linera-execution/wasmer", "linera-storage/wasmer"]
+wasmtime = ["linera-execution/wasmtime", "linera-storage/wasmtime"]
+test = [
+    "linera-base/test", "linera-chain/test", "linera-execution/test", "linera-storage/test",
+    "linera-views/test", "proptest", "tempfile", "test-log", "test-strategy", "tokio/parking_lot",
+]
+rocksdb = ["linera-views/rocksdb", "linera-storage/rocksdb"]
+aws = ["linera-views/aws", "linera-storage/aws"]
+scylladb = ["linera-views/scylladb", "linera-storage/scylladb"]
+
+[dependencies]
+anyhow = { workspace = true }
+async-trait = { workspace = true }
+async-graphql = { workspace = true }
+bcs = { workspace = true }
+dashmap = { workspace = true }
+futures = { workspace = true }
+linera-base = { workspace = true }
+linera-chain = { workspace = true }
+linera-execution = { workspace = true }
+linera-storage = { workspace = true }
+linera-views = { workspace = true }
+tracing = { workspace = true }
+lru = { workspace = true }
+proptest = { workspace = true, optional = true }
+rand = { workspace = true }
+serde = { workspace = true }
+serde_json = { workspace = true }
+tempfile = { workspace = true, optional = true }
+test-strategy = { workspace = true, optional = true }
+test-log = { workspace = true, optional = true }
+thiserror = { workspace = true }
+tokio = { workspace = true }
+tokio-stream = { workspace = true }
+
+[dev-dependencies]
+criterion = { workspace = true, features = ["async_tokio"] }
+counter = { workspace = true }
+meta-counter = { workspace = true }
+reentrant-counter = { workspace = true }
+fungible = { workspace = true }
+linera-core = { path = ".", default-features = false, features = ["test"] }
+linera-views = { workspace = true }
+metrics = { workspace = true }
+metrics-util = { workspace = true }
+serde_json = { workspace = true }
+social = { workspace = true }
+test-case = { workspace = true }
+tracing-subscriber = { workspace = true, features = ["fmt"] }
+
+[package.metadata.cargo-machete]
+ignored = ["proptest", "async-graphql"]
+
+[[bench]]
+name = "client_benchmarks"
+harness = false
+required-features = ["test"]

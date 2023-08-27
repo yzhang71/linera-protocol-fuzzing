@@ -1,0 +1,214 @@
+syntax = "proto3";
+package rpc.v1;
+
+import "google/protobuf/empty.proto";
+
+// A service run by the Proxy which listens for incoming connections
+// from workers and then notifies clients.
+service NotifierService {
+  // Notify a client that there has been an update for a `ChainId`.
+  rpc Notify(Notification) returns (google.protobuf.Empty);
+}
+
+// Interface provided by each physical shard (aka "worker") of a validator or a local node.
+// * All commands return either the current chain info or an error.
+// * Repeating commands produces no changes and returns no error.
+// * Some handlers may return cross-chain requests, that is, messages
+//   to be communicated to other workers of the same validator.
+service ValidatorWorker {
+  // Propose a new block.
+  rpc HandleBlockProposal(BlockProposal) returns (ChainInfoResult);
+
+  // Process a certificate without value.
+  rpc HandleLiteCertificate(LiteCertificate) returns (ChainInfoResult);
+
+  // Process a certificate.
+  rpc HandleCertificate(Certificate) returns (ChainInfoResult);
+
+  // Handle information queries for this chain.
+  rpc HandleChainInfoQuery(ChainInfoQuery) returns (ChainInfoResult);
+
+  // Handle a (trusted!) cross-chain request.
+  rpc HandleCrossChainRequest(CrossChainRequest) returns (google.protobuf.Empty);
+}
+
+// How to communicate with a validator or a local node.
+service ValidatorNode {
+  // Propose a new block.
+  rpc HandleBlockProposal(BlockProposal) returns (ChainInfoResult);
+
+  // Process a certificate without value.
+  rpc HandleLiteCertificate(LiteCertificate) returns (ChainInfoResult);
+
+  // Process a certificate.
+  rpc HandleCertificate(Certificate) returns (ChainInfoResult);
+
+  // Handle information queries for this chain.
+  rpc HandleChainInfoQuery(ChainInfoQuery) returns (ChainInfoResult);
+
+  // Subscribe to notifications for a set of Chain Ids.
+  rpc Subscribe(SubscriptionRequest) returns (stream Notification);
+}
+
+// A request for client to subscribe to notifications for a given `ChainId`
+message SubscriptionRequest {
+  repeated ChainId chain_ids = 1;
+}
+
+// Notify that a chain has a new certified block or a new message.
+message Notification {
+  ChainId chain_id = 1;
+  bytes reason = 2;
+}
+
+// A wrapper around ChainInfoResponse which contains a serialized error variant
+message ChainInfoResult {
+  oneof inner {
+    ChainInfoResponse chain_info_response = 1;
+    // a bincode wrapper around `NodeError`
+    bytes error = 2;
+  }
+}
+
+// An internal request between chains within a validator.
+message CrossChainRequest {
+  oneof inner {
+    UpdateRecipient update_recipient = 1;
+    ConfirmUpdatedRecipient confirm_updated_recipient = 2;
+  }
+}
+
+// Communicate a number of confirmed blocks from the sender to the recipient.
+// Blocks must be given by increasing heights.
+message UpdateRecipient {
+  bytes height_map = 1;
+  ChainId sender = 2;
+  ChainId recipient = 3;
+  bytes certificates = 4;
+}
+
+// Acknowledge the height of the highest confirmed blocks communicated with `UpdateRecipient`.
+message ConfirmUpdatedRecipient {
+  ChainId sender = 1;
+  ChainId recipient = 2;
+  bytes latest_heights = 3;
+}
+
+// Request information on a chain.
+message ChainInfoQuery {
+  // The chain id
+  ChainId chain_id = 1;
+
+  // Optionally test that the block height is as expected
+  optional BlockHeight test_next_block_height = 2;
+
+  // Query the current committees
+  bool request_committees = 3;
+
+  // Query the received messages that are waiting be picked in the next block.
+  bool request_pending_messages = 4;
+
+  // Query a range of certificates sent from the chain.
+  optional bytes request_sent_certificates_in_range = 5;
+
+  // Query new certificate removed from the chain.
+  optional uint64 request_received_log_excluding_first_nth = 6;
+
+  // Query values from the chain manager, not just votes.
+  bool request_manager_values = 7;
+
+  // Query a value that contains a binary blob (e.g. bytecode) required by this chain.
+  optional bytes request_blob = 8;
+}
+
+// An authenticated proposal for a new block.
+message BlockProposal {
+  // The ID of the chain (used for routing).
+  ChainId chain_id = 1;
+
+  // bincode-encoded content
+  bytes content = 2;
+
+  // Byte-encoded public key
+  Owner owner = 3;
+
+  // Signature value
+  Signature signature = 4;
+
+  // Required bytecode
+  bytes blobs = 5;
+
+  // A certificate for a validated block that justifies the proposal in this round.
+  optional bytes validated = 6;
+}
+
+// A certified statement from the committee, without the value.
+message LiteCertificate {
+  // The ID of the chain the value belongs to.
+  ChainId chain_id = 1;
+
+  // The certified value's hash
+  bytes hash = 2;
+
+  // The round in which the value was certified.
+  uint32 round = 3;
+
+  // Signatures on the value hash and round
+  bytes signatures = 4;
+
+  // Wait until all outgoing cross-chain messages from this certificate have
+  // been received by the target chains.
+  bool wait_for_outgoing_messages = 5;
+}
+
+// A certified statement from the committee, together with other certificates
+// required for execution.
+message Certificate {
+  // The ID of the chain (used for routing).
+  ChainId chain_id = 1;
+
+  // The certified value
+  bytes value = 2;
+
+  // The round in which the value was certified.
+  uint32 round = 3;
+
+  // Signatures on the value hash and round
+  bytes signatures = 4;
+
+  // Other certificates containing bytecode required by the first one
+  bytes blobs = 5;
+
+  // Wait until all outgoing cross-chain messages from this certificate have
+  // been received by the target chains.
+  bool wait_for_outgoing_messages = 6;
+}
+
+message ChainId {
+  bytes bytes = 1;
+}
+
+message PublicKey {
+  bytes bytes = 1;
+}
+
+message Owner {
+  bytes bytes = 1;
+}
+
+message Signature {
+  bytes bytes = 1;
+}
+
+// Response to `ChainInfoQuery`
+message ChainInfoResponse {
+  // bincode-encoded chain info
+  bytes chain_info = 1;
+
+  // Optional signature for the response.
+  optional Signature signature = 2;
+}
+
+message BlockHeight {
+  uint64 height = 1;
+}

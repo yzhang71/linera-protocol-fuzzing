@@ -1,0 +1,96 @@
+[package]
+name = "linera-service"
+version = "0.3.0"
+description = "Executable for clients (aka CLI wallets), proxy (aka validator frontend) and servers of the Linera protocol."
+authors = ["Linera <contact@linera.io>"]
+readme = "README.md"
+repository = "https://github.com/linera-io/linera-protocol"
+homepage = "https://linera.dev"
+documentation = "https://docs.rs/linera-service/latest/linera_service/"
+license = "Apache-2.0"
+edition = "2021"
+
+[features]
+default = ["wasmer", "rocksdb"]
+benchmark = ["linera-base/test"]
+wasmer = ["linera-execution/wasmer", "linera-storage/wasmer"]
+wasmtime = ["linera-execution/wasmtime", "linera-storage/wasmtime"]
+rocksdb = ["linera-views/rocksdb", "linera-core/rocksdb", "linera-storage/rocksdb"]
+aws = ["linera-views/aws", "linera-core/aws", "linera-storage/aws"]
+scylladb = ["linera-views/scylladb", "linera-core/scylladb", "linera-storage/scylladb"]
+
+[dependencies]
+anyhow = { workspace = true }
+async-graphql = { workspace = true }
+async-graphql-axum = { workspace = true }
+async-trait = { workspace = true }
+axum = { workspace = true, features = ["ws", "headers"] }
+bcs = { workspace = true }
+chrono = { workspace = true }
+colored = { workspace = true }
+futures = { workspace = true }
+hex = { workspace = true }
+linera-base = { workspace = true }
+linera-chain = { workspace = true }
+linera-core = { workspace = true }
+linera-execution = { workspace = true }
+linera-rpc = { workspace = true }
+linera-storage = { workspace = true }
+linera-views = { workspace = true }
+metrics-exporter-tcp = { workspace = true }
+once_cell = { workspace = true }
+reqwest = { workspace = true, features = ["json"] }
+tracing = { workspace = true }
+parse_duration = { workspace = true }
+serde = { workspace = true }
+serde_json = { workspace = true }
+structopt = { workspace = true }
+tempfile = { workspace = true }
+thiserror = { workspace = true }
+tokio = { workspace = true, features = ["full"] }
+tokio-stream = { workspace = true }
+toml = { workspace = true }
+tonic = { workspace = true }
+tonic-health = { workspace = true }
+tower-http = { workspace = true, features = ["cors"] }
+tracing-subscriber = { workspace = true, features = ["fmt"] }
+comfy-table = { workspace = true }
+dirs = { workspace = true }
+file-lock = "2.1.9"
+current_platform = "0.2.0"
+cargo_toml = "0.15.3"
+
+[dev-dependencies]
+linera-base = { workspace = true, features = ["test"] }
+linera-chain = { workspace = true, features = ["test"] }
+linera-core = { workspace = true, features = ["test"] }
+linera-execution = { workspace = true, features = ["test"] }
+linera-rpc = { workspace = true, features = ["test"] }
+linera-storage = { workspace = true, features = ["test"] }
+linera-views = { workspace = true, features = ["test"] }
+proptest = { workspace = true }
+reqwest = { workspace = true, features = ["json"] }
+test-log = { workspace = true, features = ["trace"] }
+test-strategy = { workspace = true }
+tokio = { workspace = true, features = ["full", "test-util"] }
+social = { workspace = true }
+counter = { workspace = true }
+fungible = { workspace = true }
+crowd-funding = { workspace = true }
+matching-engine = { workspace = true }
+
+[[bin]]
+name = "linera"
+path = "src/linera.rs"
+
+[[bin]]
+name = "linera-server"
+path = "src/server.rs"
+
+[[bin]]
+name = "linera-proxy"
+path = "src/proxy.rs"
+
+[[bin]]
+name = "linera-schema-export"
+path = "src/schema_export.rs"

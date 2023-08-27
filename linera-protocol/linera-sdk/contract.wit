@@ -1,0 +1,139 @@
+resource initialize {
+    static new: func(
+        context: operation-context,
+        argument: list<u8>,
+    ) -> initialize
+
+    poll: func() -> poll-execution-result
+}
+
+resource execute-operation {
+    static new: func(
+        context: operation-context,
+        operation: list<u8>,
+    ) -> execute-operation
+
+    poll: func() -> poll-execution-result
+}
+
+resource execute-message {
+    static new: func(
+        context: message-context,
+        message: list<u8>,
+    ) -> execute-message
+
+    poll: func() -> poll-execution-result
+}
+
+resource handle-application-call {
+    static new: func(
+        context: callee-context,
+        argument: list<u8>,
+        forwarded-sessions: list<session-id>,
+    ) -> handle-application-call
+
+    poll: func() -> poll-call-application
+}
+
+resource handle-session-call {
+    static new: func(
+        context: callee-context,
+        state: session-state,
+        argument: list<u8>,
+        forwarded-sessions: list<session-id>,
+    ) -> handle-session-call
+
+    poll: func() -> poll-call-session
+}
+
+record operation-context {
+    chain-id: chain-id,
+    authenticated-signer: option<owner>,
+    height: block-height,
+    index: u32,
+}
+
+record message-context {
+    chain-id: chain-id,
+    authenticated-signer: option<owner>,
+    height: block-height,
+    message-id: message-id,
+}
+
+record message-id {
+    chain-id: chain-id,
+    height: block-height,
+    index: u32,
+}
+
+record callee-context {
+    chain-id: chain-id,
+    authenticated-signer: option<owner>,
+    authenticated-caller-id: option<application-id>,
+}
+
+record application-id {
+    bytecode-id: bytecode-id,
+    creation: message-id,
+}
+
+type chain-id = crypto-hash
+type owner = crypto-hash
+type block-height = u64
+type bytecode-id = message-id
+
+variant poll-execution-result {
+    pending,
+    ready(result<execution-result, string>),
+}
+
+variant poll-call-application {
+    pending,
+    ready(result<application-call-result, string>),
+}
+
+variant poll-call-session {
+    pending,
+    ready(result<session-call-result, string>),
+}
+
+record application-call-result {
+    value: list<u8>,
+    execution-result: execution-result,
+    create-sessions: list<session-state>,
+}
+
+record session-id {
+    application-id: application-id,
+    index: u64,
+}
+
+record session-call-result {
+    inner: application-call-result,
+    new-state: option<session-state>,
+}
+
+record execution-result {
+    messages: list<tuple<destination, bool, message>>,
+    subscribe: list<tuple<channel-name, chain-id>>,
+    unsubscribe: list<tuple<channel-name, chain-id>>,
+}
+
+variant destination {
+    recipient(chain-id),
+    subscribers(channel-name),
+}
+
+record channel-name {
+    name: list<u8>,
+}
+
+type session-state = list<u8>
+type message = list<u8>
+
+record crypto-hash {
+    part1: u64,
+    part2: u64,
+    part3: u64,
+    part4: u64,
+}

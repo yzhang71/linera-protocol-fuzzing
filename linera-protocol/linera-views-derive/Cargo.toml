@@ -1,0 +1,21 @@
+[package]
+name = "linera-views-derive"
+version = "0.3.0"
+description = "The procedural macros for the crate `linera-views`"
+authors = ["Linera <contact@linera.io>"]
+repository = "https://github.com/linera-io/linera-protocol"
+homepage = "https://linera.dev"
+license = "Apache-2.0"
+edition = "2021"
+
+[lib]
+proc-macro = true
+
+[dependencies]
+syn = { workspace = true, features = ["full", "extra-traits"] }
+heck = { workspace = true }
+quote = { workspace = true }
+proc-macro2 = { workspace = true }
+convert_case = { workspace = true }
+serde = { workspace = true }
+async-graphql = { workspace = true }

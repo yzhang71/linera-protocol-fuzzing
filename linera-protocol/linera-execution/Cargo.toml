@@ -1,0 +1,64 @@
+[package]
+name = "linera-execution"
+version = "0.3.0"
+description = "Persistent data and the corresponding logics used by the Linera protocol for runtime and execution of smart contracts / applications."
+authors = ["Linera <contact@linera.io>"]
+readme = "README.md"
+repository = "https://github.com/linera-io/linera-protocol"
+homepage = "https://linera.dev"
+documentation = "https://docs.rs/linera-execution/latest/linera_execution/"
+license = "Apache-2.0"
+edition = "2021"
+
+[features]
+default = ["wasmer"]
+test = ["tokio/macros", "async-lock"]
+wasmer = [
+    "bytes", "dep:wasmer", "wasm-encoder", "wasmer-middlewares", "wasmparser",
+    "wit-bindgen-host-wasmer-rust",
+]
+wasmtime = ["dep:wasmtime", "wasm-encoder", "wasmparser", "wit-bindgen-host-wasmtime-rust"]
+
+[dependencies]
+anyhow = { workspace = true }
+async-lock = { workspace = true, optional = true }
+async-trait = { workspace = true }
+async-graphql = { workspace = true }
+bcs = { workspace = true }
+bytes = { workspace = true, optional = true }
+custom_debug_derive = { workspace = true }
+dashmap = { workspace = true }
+derive_more = { workspace = true }
+futures = { workspace = true }
+linera-base = { workspace = true }
+linera-views = { workspace = true, features = ["metrics"] }
+linera-views-derive = { workspace = true }
+lru = { workspace = true }
+once_cell = { workspace = true }
+serde = { workspace = true }
+serde_bytes = { workspace = true }
+serde_json = { workspace = true }
+thiserror = { workspace = true }
+tokio = { workspace = true, features = ["fs"] }
+tracing = { workspace = true }
+wasm-encoder = { workspace = true, optional = true }
+wasmer = { workspace = true, optional = true }
+wasmer-middlewares = { workspace = true, optional = true }
+wasmparser = { workspace = true, optional = true }
+wasmtime = { workspace = true, optional = true }
+wit-bindgen-host-wasmer-rust = { workspace = true, optional = true }
+wit-bindgen-host-wasmtime-rust = { workspace = true, optional = true }
+
+[dev-dependencies]
+anyhow = { workspace = true }
+bcs = { workspace = true }
+counter = { workspace = true }
+linera-base = { workspace = true, features = ["test"] }
+linera-execution = { path = ".", features = ["test"] }
+test-case = { workspace = true }
+test-log = { workspace = true, features = ["trace"] }
+tracing-subscriber = { workspace = true, features = ["fmt"] }
+tokio = { workspace = true, features = ["full", "test-util"] }
+
+[package.metadata.cargo-machete]
+ignored = ["serde_bytes"]

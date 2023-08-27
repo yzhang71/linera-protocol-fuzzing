@@ -1,0 +1,3 @@
+subscription Notifications($chainId: ChainId!) {
+  notifications(chainId: $chainId)
+}

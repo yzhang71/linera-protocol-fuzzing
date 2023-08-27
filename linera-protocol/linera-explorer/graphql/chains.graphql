@@ -1,0 +1,6 @@
+query Chains {
+  chains {
+    list
+    default
+  }
+}

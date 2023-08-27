@@ -1,0 +1,83 @@
+chain-id: func() -> chain-id
+application-id: func() -> application-id
+application-parameters: func() -> list<u8>
+read-system-balance: func() -> amount
+read-system-timestamp: func() -> timestamp
+
+log: func(message: string, level: log-level)
+
+enum log-level {
+    trace,
+    debug,
+    info,
+    warn,
+    error,
+}
+
+resource load {
+    static new: func() -> load
+    poll: func() -> poll-load
+}
+
+variant poll-load {
+    pending,
+    ready(result<list<u8>, string>),
+}
+
+resource lock {
+    static new: func() -> lock
+    poll: func() -> poll-lock
+}
+
+variant poll-lock {
+    pending,
+    ready(result<unit, string>),
+}
+
+resource unlock {
+    static new: func() -> unlock
+    poll: func() -> poll-unlock
+}
+
+variant poll-unlock {
+    pending,
+    ready(result<unit, string>),
+}
+
+resource try-query-application {
+    static new: func(
+        application: application-id,
+        query: list<u8>,
+    ) -> try-query-application
+
+    poll: func() -> poll-load
+}
+
+record application-id {
+    bytecode-id: bytecode-id,
+    creation: message-id,
+}
+
+type bytecode-id = message-id
+
+record message-id {
+    chain-id: chain-id,
+    height: block-height,
+    index: u32,
+}
+
+type chain-id = crypto-hash
+type block-height = u64
+type timestamp = u64
+
+record crypto-hash {
+    part1: u64,
+    part2: u64,
+    part3: u64,
+    part4: u64,
+}
+
+record amount {
+    lower-half: u64,
+    upper-half: u64,
+}

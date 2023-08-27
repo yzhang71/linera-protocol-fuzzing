@@ -1,0 +1,39 @@
+[package]
+name = "linera-storage"
+version = "0.3.0"
+description = "Storage abstractions for the Linera protocol."
+authors = ["Linera <contact@linera.io>"]
+readme = "README.md"
+repository = "https://github.com/linera-io/linera-protocol"
+homepage = "https://linera.dev"
+documentation = "https://docs.rs/linera-storage/latest/linera_storage/"
+license = "Apache-2.0"
+edition = "2021"
+
+[features]
+default = ["wasmer", "rocksdb"]
+test = ["tokio/rt", "tokio/test-util", "tokio/time", "linera-execution/test", "linera-views/test"]
+wasmer = ["linera-execution/wasmer"]
+wasmtime = ["linera-execution/wasmtime"]
+aws = ["linera-views/aws"]
+rocksdb = ["linera-views/rocksdb"]
+scylladb = ["linera-views/scylladb"]
+
+[dependencies]
+tempfile = { workspace = true }
+async-trait = { workspace = true }
+bcs = { workspace = true }
+dashmap = { workspace = true }
+futures = { workspace = true }
+linera-base = { workspace = true }
+linera-chain = { workspace = true }
+linera-execution = { workspace = true }
+linera-views = { workspace = true, features = ["metrics"] }
+metrics = { workspace = true }
+tracing = { workspace = true }
+serde = { workspace = true }
+tokio = { workspace = true, features = ["macros"] }
+
+[dev-dependencies]
+anyhow = { workspace = true }
+linera-storage = { path = ".", features = ["test"] }
