@@ -219,7 +219,7 @@ impl WasmApplication {
     ///
     /// The rules try to follow the hardcoded [rules in the Wasmtime runtime
     /// engine](https://docs.rs/wasmtime/5.0.0/wasmtime/struct.Store.html#method.add_fuel).
-    fn operation_cost(operator: &Operator) -> u64 {
+    pub fn operation_cost(operator: &Operator) -> u64 {
         match operator {
             Operator::Nop
             | Operator::Drop
