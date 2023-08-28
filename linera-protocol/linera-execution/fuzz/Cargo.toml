@@ -43,7 +43,13 @@ path = ".."
 members = ["."]
 
 [profile.release]
-debug = 1
+debug = true
+overflow-checks = true
+
+[profile.dev]
+debug = true
+overflow-checks = true
+
 
 [[bin]]
 name = "cached_contract_module"
